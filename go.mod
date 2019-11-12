@@ -1,4 +1,4 @@
-module github.com/aws/amazon-kinesis-firehose-for-fluent-bit
+module github.com/ZEPL/amazon-kinesis-firehose-for-fluent-bit
 
 go 1.12
 

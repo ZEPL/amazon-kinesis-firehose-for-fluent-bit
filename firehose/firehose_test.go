@@ -14,12 +14,13 @@
 package firehose
 
 import (
+	"fmt"
 	"os"
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-kinesis-firehose-for-fluent-bit/firehose/mock_firehose"
-	"github.com/aws/amazon-kinesis-firehose-for-fluent-bit/plugins"
+	"github.com/ZEPL/amazon-kinesis-firehose-for-fluent-bit/firehose/mock_firehose"
+	"github.com/ZEPL/amazon-kinesis-firehose-for-fluent-bit/plugins"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/firehose"
 	fluentbit "github.com/fluent/fluent-bit-go/output"
@@ -88,4 +89,37 @@ func TestAddRecordAndFlush(t *testing.T) {
 	err := output.Flush()
 	assert.NoError(t, err, "Unexpected error calling flush")
 
+}
+
+func TestProcessRecord(t *testing.T) {
+	record := map[interface{}]interface{}{
+		"somekey": []byte("some value"),
+	}
+
+	ctrl := gomock.NewController(t)
+	mockFirehose := mock_firehose.NewMockPutRecordBatcher(ctrl)
+
+	mockFirehose.EXPECT().PutRecordBatch(gomock.Any()).Return(&firehose.PutRecordBatchOutput{
+		FailedPutCount: aws.Int64(0),
+	}, nil)
+
+	timer, _ := plugins.NewTimeout(func(d time.Duration) {
+		logrus.Errorf("[firehose] timeout threshold reached: Failed to send logs for %v\n", d)
+		logrus.Error("[firehose] Quitting Fluent Bit")
+		os.Exit(1)
+	})
+
+	output := OutputPlugin{
+		region:         "us-east-1",
+		deliveryStream: "stream",
+		dataKeys:       "",
+		client:         mockFirehose,
+		records:        make([]*firehose.Record, 0, 500),
+		backoff:        plugins.NewBackoff(),
+		timer:          timer,
+	}
+
+	bytes, err := output.processRecord(record)
+	assert.NoError(t, err)
+	fmt.Print(bytes)
 }

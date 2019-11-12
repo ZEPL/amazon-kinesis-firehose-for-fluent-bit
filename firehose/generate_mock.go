@@ -13,4 +13,4 @@
 
 package firehose
 
-//go:generate mockgen.sh github.com/aws/amazon-kinesis-firehose-for-fluent-bit/firehose PutRecordBatcher mock_firehose/mock.go
+//go:generate mockgen.sh github.com/ZEPL/amazon-kinesis-firehose-for-fluent-bit/firehose PutRecordBatcher mock_firehose/mock.go

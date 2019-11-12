@@ -19,7 +19,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/aws/amazon-kinesis-firehose-for-fluent-bit/plugins"
+	"github.com/ZEPL/amazon-kinesis-firehose-for-fluent-bit/plugins"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"

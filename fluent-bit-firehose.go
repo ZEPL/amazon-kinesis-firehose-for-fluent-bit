@@ -15,16 +15,13 @@ package main
 
 import (
 	"C"
+	"fmt"
 	"unsafe"
 
-	"github.com/aws/amazon-kinesis-firehose-for-fluent-bit/firehose"
-	"github.com/aws/amazon-kinesis-firehose-for-fluent-bit/plugins"
+	"github.com/ZEPL/amazon-kinesis-firehose-for-fluent-bit/firehose"
+	"github.com/ZEPL/amazon-kinesis-firehose-for-fluent-bit/plugins"
 	"github.com/fluent/fluent-bit-go/output"
-
 	"github.com/sirupsen/logrus"
-)
-import (
-	"fmt"
 )
 
 var (
