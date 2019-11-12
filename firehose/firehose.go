@@ -163,14 +163,22 @@ func (output *OutputPlugin) processRecord(record map[interface{}]interface{}) ([
 	}
 
 	var json = jsoniter.ConfigCompatibleWithStandardLibrary
+	// Zepl case
+	if value, ok := record["log"]; ok {
+		if s, ok := value.(string); ok {
+			logMap := make(map[string]interface{})
+			if err := json.UnmarshalFromString(s, &logMap); err != nil {
+				logrus.Debugf("[firehose %d] Failed to decode log: %v\n", output.PluginID, err)
+			}
+			record["log"] = logMap
+		}
+	}
+
 	data, err := json.Marshal(record)
 	if err != nil {
 		logrus.Debugf("[firehose %d] Failed to marshal record: %v\n", output.PluginID, record)
 		return nil, err
 	}
-
-	// append newline
-	data = append(data, []byte("\n")...)
 
 	if len(data) > maximumRecordSize {
 		return nil, fmt.Errorf("Log record greater than max size allowed by Kinesis")
