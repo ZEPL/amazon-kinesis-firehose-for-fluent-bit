@@ -14,7 +14,6 @@
 package firehose
 
 import (
-	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -93,7 +92,9 @@ func TestAddRecordAndFlush(t *testing.T) {
 
 func TestProcessRecord(t *testing.T) {
 	record := map[interface{}]interface{}{
-		"somekey": []byte("some value"),
+		"log": `{"level":"info","ts":1570507208.5068057}`,
+		"stream":"stderr",
+		"time":"2019-10-08T04:00:08.506974443Z",
 	}
 
 	ctrl := gomock.NewController(t)
@@ -121,5 +122,5 @@ func TestProcessRecord(t *testing.T) {
 
 	bytes, err := output.processRecord(record)
 	assert.NoError(t, err)
-	fmt.Print(bytes)
+	assert.Equal(t, []byte(`{"log":{"level":"info","ts":1570507208.5068057},"stream":"stderr","time":"2019-10-08T04:00:08.506974443Z"}`), bytes)
 }

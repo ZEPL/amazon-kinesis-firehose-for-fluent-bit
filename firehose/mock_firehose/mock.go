@@ -20,7 +20,7 @@ package mock_firehose
 import (
 	reflect "reflect"
 
-	firehose "github.com/ZEPL/aws-sdk-go/service/firehose"
+	firehose "github.com/aws/aws-sdk-go/service/firehose"
 	gomock "github.com/golang/mock/gomock"
 )
 
