@@ -180,6 +180,9 @@ func (output *OutputPlugin) processRecord(record map[interface{}]interface{}) ([
 		return nil, err
 	}
 
+	// append newline
+	data = append(data, []byte("\n")...)
+
 	if len(data) > maximumRecordSize {
 		return nil, fmt.Errorf("Log record greater than max size allowed by Kinesis")
 	}

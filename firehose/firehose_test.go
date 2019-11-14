@@ -122,5 +122,5 @@ func TestProcessRecord(t *testing.T) {
 
 	bytes, err := output.processRecord(record)
 	assert.NoError(t, err)
-	assert.Equal(t, []byte(`{"log":{"level":"info","ts":1570507208.5068057},"stream":"stderr","time":"2019-10-08T04:00:08.506974443Z"}`), bytes)
+	assert.Equal(t, []byte(`{"log":{"level":"info","ts":1570507208.5068057},"stream":"stderr","time":"2019-10-08T04:00:08.506974443Z"}` + "\n"), bytes)
 }
